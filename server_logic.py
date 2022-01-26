@@ -61,7 +61,10 @@ def choose_move(data: dict) -> str:
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
     # where its body
-    for movesP in possible_moves:
+    # copy the possible moves
+    cpyPossibleMoves = possible_moves
+
+    for movesP in cpyPossibleMoves:
         if movesP == "up":
             if (False == isValid(data["you"]["head"]["x"],  data["you"]["head"]["y"] + 1, board_height, board_width)):
                 possible_moves.remove("up")
