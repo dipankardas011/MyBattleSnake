@@ -33,6 +33,8 @@ def avoid_my_neck(my_head: Dict[str, int], my_body: List[dict], possible_moves: 
 
     return possible_moves
 
+def isValid(X: int, Y: int, BH: int, BW: int) -> bool:
+    return X >= 0 and X < BW and Y >= 0 and Y < BH
 
 def choose_move(data: dict) -> str:
     """
@@ -40,11 +42,6 @@ def choose_move(data: dict) -> str:
     For a full example of 'data', see https://docs.battlesnake.com/references/api/sample-move-request
 
     return: A String, the single move to make. One of "up", "down", "left" or "right".
-
-    Use the information in 'data' to decide your next move. The 'data' variable can be interacted
-    with as a Python Dictionary, and contains all of the information about the Battlesnake board
-    for each move of the game.
-
     """
     my_head = data["you"]["head"]  # A dictionary of x/y coordinates like {"x": 0, "y": 0}
     my_body = data["you"]["body"]  # A list of x/y coordinate dictionaries like [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
@@ -61,10 +58,29 @@ def choose_move(data: dict) -> str:
     possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
 
     # TODO: Using information from 'data', find the edges of the board and don't let your Battlesnake move beyond them
-    # board_height = ?
-    # board_width = ?
+    board_height = data["board"]["height"]
+    board_width = data["board"]["width"]
+    # where its body
+    for movesP in possible_moves:
+        if movesP == "up":
+            if (False == isValid(data["you"]["head"]["x"],  data["you"]["head"]["y"] + 1, board_height, board_width)):
+                possible_moves.remove("up")
 
-    # TODO Using information from 'data', don't let your Battlesnake pick a move that would hit its own body
+        elif movesP == "down":
+            if (False == isValid(data["you"]["head"]["x"],  data["you"]["head"]["y"] - 1, board_height, board_width)):
+                possible_moves.remove("down")
+
+        elif movesP == "left":
+            if (False == isValid(data["you"]["head"]["x"] - 1,  data["you"]["head"]["y"], board_height, board_width)):
+                possible_moves.remove("left")
+        
+        else:
+            if (False == isValid(data["you"]["head"]["x"] + 1,  data["you"]["head"]["y"], board_height, board_width)):
+                possible_moves.remove("right")
+
+    
+
+    # TODO: Using information from 'data', don't let your Battlesnake pick a move that would hit its own body
 
     # TODO: Using information from 'data', don't let your Battlesnake pick a move that would collide with another Battlesnake
 
